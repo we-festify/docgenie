@@ -1,0 +1,7 @@
+dist
+build
+.env
+*.env
+.env.*
+
+__pycache__

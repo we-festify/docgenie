@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "docgenie"
+version = "0.0.1"
+description = "A tool for generating documentation"
+authors = ["Ujjwal Jindal <email@example.com>"]
+
+[tool.poetry.scripts]
+docgenie = "docgenie.cli:cli"
+
+[tool.poetry.dependencies]
+python = "^3.8.1"
+click = "^8.1.7"
+python-dotenv = "^1.0.1"
+inquirer = "^3.4.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

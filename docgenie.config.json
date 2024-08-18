@@ -1,0 +1,19 @@
+{
+  "root_dir": ".",
+  "agent": {
+    "name": "gemini-1.5-flash",
+    "config": {}
+  },
+  "rules": [
+    {
+      "type": "readme",
+      "dir": "docgenie/cli",
+      "include": ["__init__.py"],
+      "exclude": [""],
+      "output": ".",
+      "depth": 3,
+      "format": "markdown",
+      "prompt": ""
+    }
+  ]
+}
