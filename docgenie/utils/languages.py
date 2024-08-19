@@ -64,11 +64,23 @@ def __getRawImportsFromFile(file, file_extension):
 
 def __getPossibleImports(file_path: str, file_extension: str):
     def modifyImportForPython(import_path: str):
-        import_path = import_path.replace(".", "/")
-        if import_path.startswith("//") or import_path.startswith("\\\\"):
-            import_path = import_path.replace("//", "../")
-        elif import_path.startswith("/"):
+        if import_path.startswith("."):
             import_path = import_path[1:]
+        
+        # extract front dots
+        front_dots = 0
+        for i in range(len(import_path)):
+            if import_path[i] == ".":
+                front_dots += 1
+            else:
+                break
+        
+        # portion without front dots
+        import_path = import_path[front_dots:]
+        import_path = import_path.replace(".", "/")
+        # replace front dots with ../
+        import_path = "../" * front_dots + import_path
+        
         import_paths: list[str] = []
         if not import_path.endswith(".py"):
             import_paths.append(import_path.lower() + ".py")
