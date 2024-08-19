@@ -1,87 +1,122 @@
-# Docgenie: Generate Documentation from Code
+## Docgenie: Documentation Generation Tool
 
-Docgenie is a command-line tool that leverages the power of large language models (LLMs) to automatically generate comprehensive documentation for your code.
+Docgenie is a powerful command-line tool that leverages advanced AI models to automatically generate comprehensive documentation for your projects. It supports various documentation types, including general documentation, README files, API documentation, and code model explanations.
 
-## Getting Started
+### Installation
 
-1. **Installation:**
-
-   ```bash
-   pip install docgenie
-   ```
-
-2. **Initialize Configuration:**
-
-   ```bash
-   docgenie init
-   ```
-
-   The `init` command guides you through setting up a `docgenie.config.json` file. This file stores your project's configuration, including:
-
-   - **Root directory:** The base directory of your project.
-   - **Agent:** The LLM model to use for generating documentation.
-   - **Rules:** A set of rules defining the types of documentation to generate, the specific directories to process, and other customization options.
-
-3. **Generate Documentation:**
-
-   ```bash
-   docgenie build
-   ```
-
-   This command uses the information in `docgenie.config.json` to analyze your code and generate documentation in the specified output formats.
-
-## Usage Examples
-
-### Basic Usage
-
-The following example demonstrates generating general documentation for a project within the `my-project` directory:
+Docgenie requires Python 3.8.1 or higher. To install it, run the following command:
 
 ```bash
-# Initialize configuration
-docgenie init
+pip install docgenie
+```
 
-# Modify docgenie.config.json to include:
-# - Root directory: my-project
-# - Agent: gemini-1.5-flash
-# - Rules:
-#   - type: general
-#     dir: .
-#     include: *.py, *.js, *.ts
-#     exclude: *test.py, *test.js
-#     output: docs
-#     depth: 3
-#     format: markdown
+### Setup
 
-# Build documentation
+1. **Initialize Configuration:**
+   Run `docgenie init` to create a `docgenie.config.json` file in your project root directory. This file contains the configuration settings for Docgenie.
+
+2. **Configure the AI Agent:**
+
+   - **Custom API:** Select `custom-api` as the AI agent if you want to use your own API endpoint for documentation generation. You will need to provide the API URL, headers, and query parameters.
+   - **Gemini:** Select `gemini-1.5-flash` as the AI agent to leverage Google's Gemini model. You will need to set the `DOCGENIE_MODEL_API_KEY` environment variable to your Gemini API key.
+
+3. **Define Documentation Rules:**
+   - **Type:** Select the type of documentation you want to generate for each rule (e.g., `general`, `readme`, `api`, `model`).
+   - **Directory:** Specify the directory where the code files reside.
+   - **Include Patterns:** Define patterns for files to be included in the documentation generation process (wildcards `*` and `?` are supported).
+   - **Exclude Patterns:** Define patterns for files to be excluded from the documentation generation process (wildcards `*` and `?` are supported).
+   - **Output Directory:** Specify the directory where the generated documentation files will be saved.
+   - **Search Depth:** Set the depth of the directory search for code files.
+   - **Output Format:** Choose the output format for the documentation (e.g., `markdown`, `html`, `text`).
+   - **Prompt:** Add any additional instructions or context for the AI agent.
+
+**Example `docgenie.config.json`:**
+
+```json
+{
+  "root_dir": ".",
+  "agent": {
+    "name": "gemini-1.5-flash",
+    "config": {}
+  },
+  "rules": [
+    {
+      "type": "readme",
+      "dir": "src",
+      "include": ["*.py"],
+      "exclude": [],
+      "output": "docs",
+      "depth": 3,
+      "format": "markdown",
+      "prompt": ""
+    }
+  ]
+}
+```
+
+### Usage
+
+To generate documentation, run the following command:
+
+```bash
 docgenie build
 ```
 
-### Advanced Usage
+Docgenie will process your code files based on the defined rules and generate documentation in the specified output directory.
 
-Docgenie offers various options for customizing your documentation generation:
+### Code Structure
 
-- **Document Types:** Generate different types of documentation like README files, API specifications, model explanations, and general overview documentation.
-- **File Inclusion and Exclusion:** Control which files are included or excluded from documentation generation using patterns.
-- **Output Formats:** Choose output formats like Markdown, HTML, and plain text.
-- **Custom Prompts:** Add additional prompts to guide the LLM for specific documentation needs.
+The code is structured as follows:
 
-## Code Structure
+- **docgenie/cli/**init**.py:** Defines the command-line interface (CLI) for Docgenie, including the `build` and `init` commands.
+- **docgenie/models/**init**.py:** Defines the supported AI models.
+- **docgenie/models/gemini.py:** Implements the Gemini model for documentation generation.
+- **docgenie/models/custom_api.py:** Implements the Custom API model for documentation generation.
+- **docgenie/main.py:** Contains the core logic for loading configuration, generating prompts, and generating documentation.
+- **docgenie/prompts.py:** Defines the prompts used to interact with the AI models.
+- **docgenie/utils/file.py:** Provides utility functions for reading and writing files.
+- **docgenie/utils/patterns.py:** Provides functionality for matching files based on patterns.
+- **docgenie/utils/languages.py:** Provides functions to extract import paths from code based on the language.
+- **docgenie/model.py:** Handles the loading and interaction with AI models.
+- **docgenie/utils/terminal.py:** Provides functions for displaying colored text in the terminal.
 
-The Docgenie project has the following code structure:
+### Configuration Parameters
 
-- **`docgenie`:** The main package containing core functionality:
-  - **`cli`:** Command-line interface for interacting with Docgenie.
-  - **`main`:** Main execution logic for documentation generation.
-  - **`model`:** Abstraction layer for different LLM models.
-  - **`prompts`:** Prompt templates for generating various types of documentation.
-  - **`utils`:** Helper functions for file handling, pattern matching, and language-specific import analysis.
-- **`docgenie.config.json`:** Configuration file for project settings.
+**`docgenie.config.json`**:
 
-## Contributing
+- **`root_dir`**: Specifies the root directory of the project. Defaults to the current directory.
+- **`agent`**:
+  - **`name`**: The name of the AI agent to use. Supported values: `gemini-1.5-flash`, `custom-api`.
+  - **`config`**:
+    - **For `custom-api`**:
+      - **`url`**: The URL of the custom API endpoint.
+      - **`headers`**: A dictionary of headers to be sent with the API request.
+      - **`query`**: A dictionary of query parameters to be sent with the API request.
+    - **For `gemini-1.5-flash`**: No specific configuration parameters are required.
+- **`rules`**: An array of objects representing the documentation rules. Each rule object has the following properties:
+  - **`type`**: The type of documentation to generate. Supported values: `general`, `readme`, `api`, `model`.
+  - **`dir`**: The directory where the code files reside.
+  - **`include`**: An array of patterns for files to be included in the documentation generation process.
+  - **`exclude`**: An array of patterns for files to be excluded from the documentation generation process.
+  - **`output`**: The directory where the generated documentation files will be saved.
+  - **`depth`**: The depth of the directory search for code files.
+  - **`format`**: The output format for the documentation. Supported values: `markdown`, `html`, `text`.
+  - **`prompt`**: Additional instructions or context for the AI agent.
 
-Contributions to Docgenie are welcome! Please feel free to open issues or submit pull requests.
+### Environment Variables
 
-## License
+- **`DOCGENIE_MODEL_API_KEY`**: The API key for the Gemini model.
+
+### Contributing
+
+Contributions are welcome! Please follow the standard contribution guidelines:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bugfix.
+3. Make your changes and write unit tests.
+4. Submit a pull request.
+
+### License
 
 Docgenie is licensed under the MIT License.
 

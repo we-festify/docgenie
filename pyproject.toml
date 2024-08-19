@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "docgenie"
-version = "0.0.1"
+version = "0.0.2"
 description = "A tool for generating documentation"
-authors = ["Ujjwal Jindal <email@example.com>"]
+authors = ["Ujjwal Jindal <jindalujjwal0720@gmail.com>"]
 
 [tool.poetry.scripts]
 docgenie = "docgenie.cli:cli"
