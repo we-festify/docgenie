@@ -3,6 +3,9 @@ name = "docgenie"
 version = "0.0.2"
 description = "A tool for generating documentation"
 authors = ["Ujjwal Jindal <jindalujjwal0720@gmail.com>"]
+readme = "README.md"
+license = "MIT"
+classifiers = ["Programming Language :: Python :: 3", "License :: OSI Approved :: MIT License"]
 
 [tool.poetry.scripts]
 docgenie = "docgenie.cli:cli"
@@ -19,3 +22,6 @@ pytest = "^7.0"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[project.urls]
+Homepage = "https://github.com/we-festify/docgenie"
