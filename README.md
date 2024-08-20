@@ -46,7 +46,7 @@ pip install docgenie
 
 **Example `docgenie.config.json`:**
 
-```json
+```js
 {
   "root_dir": ".", // Root directory of your project
   "agent": {
