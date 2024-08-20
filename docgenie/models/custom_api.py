@@ -39,6 +39,14 @@ class CustomAPI:
 
     def generateContent(self, prompt: str = "") -> str:
         import requests
+
+        # replace {DOCGENIE_MODEL_PROMPT} with the actual prompt
+        for key, value in self.headers.items():
+            self.headers[key] = value.replace("{DOCGENIE_MODEL_PROMPT}", prompt)
+        for key, value in self.query_params.items():
+            self.query_params[key] = value.replace("{DOCGENIE_MODEL_PROMPT}", prompt)
+        self.api_url = self.api_url.replace("{DOCGENIE_MODEL_PROMPT}", prompt)
+
         response = requests.get(self.api_url, headers=self.headers, params=self.query_params)
         response = response.text
         return response
