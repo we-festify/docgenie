@@ -23,5 +23,5 @@ class Model:
         if self.model is None:
             print("\u001b[31mModel not loaded correctly. Please check the configuration.\u001b[0m")
             exit(1)
-        return self.model.generateContent(prompt) + "\n\n" + "The documentation is generated using AI by docgenie. If you found any issues, please report them to the team."
+        return self.model.generateContent(prompt) + "\n\n" + "The documentation is generated using AI by [docgenie](https://github.com/we-festify/docgenie). If you found any issues, please report them to the team."
     

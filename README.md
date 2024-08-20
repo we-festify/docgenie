@@ -1,8 +1,22 @@
-## Docgenie: Documentation Generation Tool
+# Docgenie: Documentation Generation Tool
 
 Docgenie is a powerful command-line tool that leverages advanced AI models to automatically generate comprehensive documentation for your projects. It supports various documentation types, including general documentation, README files, API documentation, and code model explanations.
 
-### Installation
+## Table of Contents
+
+- [Installation](#installation)
+- [Setup](#setup)
+- [Usage](#usage)
+- [Usage examples](#usage-examples)
+  - [Example 1: Generate general documentation for a Python project](#example-1-generate-general-documentation-for-a-python-project)
+  - [Example 2: Generating API documentation for a RESTful API](#example-2-generating-api-documentation-for-a-restful-api)
+- [Code Structure for contributors](#code-structure-for-contributors)
+- [Configuration Parameters](#configuration-parameters)
+- [Environment Variables](#environment-variables)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Installation
 
 Docgenie requires Python 3.8.1 or higher. To install it, run the following command:
 
@@ -10,7 +24,7 @@ Docgenie requires Python 3.8.1 or higher. To install it, run the following comma
 pip install docgenie
 ```
 
-### Setup
+## Setup
 
 1. **Initialize Configuration:**
    Run `docgenie init` to create a `docgenie.config.json` file in your project root directory. This file contains the configuration settings for Docgenie.
@@ -18,7 +32,7 @@ pip install docgenie
 2. **Configure the AI Agent:**
 
    - **Custom API:** Select `custom-api` as the AI agent if you want to use your own API endpoint for documentation generation. You will need to provide the API URL, headers, and query parameters.
-   - **Gemini:** Select `gemini-1.5-flash` as the AI agent to leverage Google's Gemini model. You will need to set the `DOCGENIE_MODEL_API_KEY` environment variable to your Gemini API key.
+   - **Gemini:** Select `gemini-*` as the AI agent to leverage Google's Gemini model. You will need to set the `DOCGENIE_MODEL_API_KEY` environment variable to your Gemini API key.
 
 3. **Define Documentation Rules:**
    - **Type:** Select the type of documentation you want to generate for each rule (e.g., `general`, `readme`, `api`, `model`).
@@ -34,27 +48,31 @@ pip install docgenie
 
 ```json
 {
-  "root_dir": ".",
+  "root_dir": ".", // Root directory of your project
   "agent": {
-    "name": "gemini-1.5-flash",
-    "config": {}
+    "name": "custom-api", // Name of the AI model to use
+    "config": {
+      "url": "", // API URL for custom API model (if applicable)
+      "headers": {}, // Headers for custom API model (if applicable)
+      "query": {} // Query parameters for custom API model (if applicable)
+    }
   },
   "rules": [
     {
-      "type": "readme",
-      "dir": "src",
-      "include": ["*.py"],
-      "exclude": [],
-      "output": "docs",
-      "depth": 3,
-      "format": "markdown",
-      "prompt": ""
+      "type": "general", // Type of documentation to generate (general, api, readme, model)
+      "dir": ".", // Directory to generate documentation for
+      "include": [], // Patterns to include (using wildcard characters * and ?)
+      "exclude": [], // Patterns to exclude (using wildcard characters * and ?)
+      "output": ".", // Output directory
+      "depth": 3, // Search depth for code analysis
+      "format": "markdown", // Output format (markdown, html, text)
+      "prompt": "" // Additional prompt for the AI model
     }
   ]
 }
 ```
 
-### Usage
+## Usage
 
 To generate documentation, run the following command:
 
@@ -64,7 +82,51 @@ docgenie build
 
 Docgenie will process your code files based on the defined rules and generate documentation in the specified output directory.
 
-### Code Structure
+## Usage examples
+
+### Example 1: Generate general documentation for a Python project:
+
+```json
+{
+  "root_dir": ".",
+  "agent": {
+    "name": "gemini-1.5-flash",
+    "config": {}
+  },
+  "rules": [
+    {
+      "type": "general",
+      "dir": ".",
+      "include": ["*.py"],
+      "exclude": ["test_*"],
+      "output": "docs",
+      "depth": 3,
+      "format": "markdown"
+    }
+  ]
+}
+```
+
+### Example 2: Generating API documentation for a RESTful API:
+
+```json
+{
+  "root_dir": "./my_api",
+  "agent": {
+    "name": "gemini-1.5-pro"
+  },
+  "rules": [
+    {
+      "type": "api",
+      "dir": "./my_api/routes",
+      "include": ["*.js"],
+      "output": "./docs/api"
+    }
+  ]
+}
+```
+
+## Code Structure for contributors
 
 The code is structured as follows:
 
@@ -80,19 +142,24 @@ The code is structured as follows:
 - **docgenie/model.py:** Handles the loading and interaction with AI models.
 - **docgenie/utils/terminal.py:** Provides functions for displaying colored text in the terminal.
 
-### Configuration Parameters
+## Configuration Parameters
 
 **`docgenie.config.json`**:
 
 - **`root_dir`**: Specifies the root directory of the project. Defaults to the current directory.
 - **`agent`**:
+
   - **`name`**: The name of the AI agent to use. Supported values: `gemini-1.5-flash`, `custom-api`.
   - **`config`**:
+
     - **For `custom-api`**:
+
       - **`url`**: The URL of the custom API endpoint.
       - **`headers`**: A dictionary of headers to be sent with the API request.
       - **`query`**: A dictionary of query parameters to be sent with the API request.
-    - **For `gemini-1.5-flash`**: No specific configuration parameters are required.
+
+      **Note:** You can use {DOCGENIE_MODEL_API_KEY} and {DOCGENIE_MODEL_PROMPT} placeholders in the URL, headers, and query parameters, which will be replaced with the actual API key and prompt during runtime.
+
 - **`rules`**: An array of objects representing the documentation rules. Each rule object has the following properties:
   - **`type`**: The type of documentation to generate. Supported values: `general`, `readme`, `api`, `model`.
   - **`dir`**: The directory where the code files reside.
@@ -103,11 +170,11 @@ The code is structured as follows:
   - **`format`**: The output format for the documentation. Supported values: `markdown`, `html`, `text`.
   - **`prompt`**: Additional instructions or context for the AI agent.
 
-### Environment Variables
+## Environment Variables
 
 - **`DOCGENIE_MODEL_API_KEY`**: The API key for the Gemini model.
 
-### Contributing
+## Contributing
 
 Contributions are welcome! Please follow the standard contribution guidelines:
 
@@ -116,8 +183,8 @@ Contributions are welcome! Please follow the standard contribution guidelines:
 3. Make your changes and write unit tests.
 4. Submit a pull request.
 
-### License
+## License
 
 Docgenie is licensed under the MIT License.
 
-The documentation is generated using AI by docgenie. If you found any issues, please report them to the team.
+The documentation is generated using AI by [docgenie](https://github.com/we-festify/docgenie). If you found any issues, please report them to the team.

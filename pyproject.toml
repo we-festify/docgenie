@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "docgenie"
-version = "0.0.2"
+version = "0.0.3"
 description = "A tool for generating documentation"
 authors = ["Ujjwal Jindal <jindalujjwal0720@gmail.com>"]
 readme = "README.md"
